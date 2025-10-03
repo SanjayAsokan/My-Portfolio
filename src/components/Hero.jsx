@@ -67,7 +67,7 @@ export default function Hero({ isDark }) {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <a
-            href="https://drive.google.com/file/d/1POBW6BmCaVo2rIF4dGDVg7bXxUX_So3V/view?usp=drive_link"
+            href="https://drive.google.com/file/d/1dL9XStUQ0PDXYkByG76UtCZkSY8I6W-u/view?usp=drive_link"
             target="_blank"
             rel="noopener noreferrer"
             className="px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors"
