@@ -30,14 +30,14 @@ app.post("/contact", async (req, res) => {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS, // App Password
+        user: "sanjayasokan1382000@gmail.com",
+        pass: "xqpijdmaetxfhdyg", // App Password
       },
     });
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
+      from: "sanjayasokan1382000@gmail.com",
+      to: "sanjayasokan1382000@gmail.com",
       subject: `New message from ${name} <${email}>`,
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
     };

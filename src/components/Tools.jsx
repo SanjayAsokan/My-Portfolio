@@ -102,7 +102,7 @@ export default function Tools({ isDark }) {
       </div>
 
       {/* Shimmer animation */}
-      <style jsx>{`
+      <style>{`
         @keyframes shimmer {
           0% {
             transform: translateX(-100%);
