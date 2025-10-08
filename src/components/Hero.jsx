@@ -10,14 +10,13 @@ export default function Hero({ isDark }) {
     "Building Scalable Applications",
     "Creative Problem Solver",
     "Driven by Innovation",
-    "Crafting Efficient Web Solutions"
+    "Crafting Efficient Web Solutions",
   ];
 
   const emojis = ["🚀", "✨", "💻", "🌟", "🎯"];
 
   return (
-    <section className="relative flex flex-col items-center justify-center px-4 min-h-[55vh] overflow-hidden">
-      
+    <section className="relative flex flex-col items-center justify-center px-4 min-h-[65vh] overflow-hidden">
       {/* Floating Emojis in background */}
       {emojis.map((emoji, i) => (
         <motion.span
@@ -25,14 +24,14 @@ export default function Hero({ isDark }) {
           className="absolute text-3xl pointer-events-none select-none opacity-30"
           style={{
             top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`
+            left: `${Math.random() * 100}%`,
           }}
           animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
           transition={{
             repeat: Infinity,
             duration: 10 + Math.random() * 10,
             repeatType: "loop",
-            delay: Math.random() * 3
+            delay: Math.random() * 3,
           }}
         >
           {emoji}
@@ -46,11 +45,14 @@ export default function Hero({ isDark }) {
             isDark ? "text-white" : "text-black"
           }`}
         >
-          Hi, I’m <span className={isDark ? "text-blue-400" : "text-blue-600"}>Sanjay A</span>
+          Hi, I’m{" "}
+          <span className={isDark ? "text-blue-400" : "text-blue-600"}>
+            Sanjay A
+          </span>
         </h1>
 
         <h2
-          className={`text-lg md:text-2xl font-medium mb-4 ${
+          className={`text-lg md:text-2xl font-medium mb-5 ${
             isDark ? "text-gray-200" : "text-gray-800"
           }`}
         >
@@ -81,7 +83,9 @@ export default function Hero({ isDark }) {
               target="_blank"
               rel="noopener noreferrer"
               className={`text-2xl transition-colors ${
-                isDark ? "text-white hover:text-blue-400" : "text-black hover:text-blue-600"
+                isDark
+                  ? "text-white hover:text-blue-400"
+                  : "text-black hover:text-blue-600"
               }`}
             >
               <FaGithub />
@@ -91,7 +95,9 @@ export default function Hero({ isDark }) {
               target="_blank"
               rel="noopener noreferrer"
               className={`text-2xl transition-colors ${
-                isDark ? "text-white hover:text-blue-400" : "text-black hover:text-blue-600"
+                isDark
+                  ? "text-white hover:text-blue-400"
+                  : "text-black hover:text-blue-600"
               }`}
             >
               <FaLinkedin />

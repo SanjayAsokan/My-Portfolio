@@ -21,9 +21,9 @@ export default function App() {
       <Navbar toggleTheme={toggleTheme} isDark={isDark} />
 
       {/* Main container */}
-      <div className="pt-36 max-w-6xl mx-auto px-4">
+      <div className="pt-20 max-w-6xl mx-auto px-4">
         {/* Hero Section */}
-        <section id="home" className="flex justify-center items-center py-36">
+        <section id="home" className="flex justify-center items-center py-12">
           <Hero isDark={isDark} />
         </section>
 

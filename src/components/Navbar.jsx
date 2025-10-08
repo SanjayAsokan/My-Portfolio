@@ -4,7 +4,9 @@ import { Sun, Moon, Menu as MenuIcon, X } from "lucide-react";
 
 export default function Navbar({ toggleTheme, isDark }) {
   const [isOpen, setIsOpen] = useState(false);
-  const navItems = ["home", "about", "projects", "tools", "contact"];
+
+  // ✅ Tools now comes before Projects
+  const navItems = ["home", "about", "tools", "projects", "contact"];
 
   // Prevent scrolling when menu is open
   useEffect(() => {
@@ -81,7 +83,7 @@ export default function Navbar({ toggleTheme, isDark }) {
                 ? "bg-gray-700 text-white border-t border-gray-600"
                 : "bg-gray-100 text-gray-900 border-t border-gray-300"
             }`}
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside menu
+            onClick={(e) => e.stopPropagation()}
           >
             {navItems.map((item) => (
               <li

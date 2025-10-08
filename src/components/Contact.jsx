@@ -1,115 +1,156 @@
-// src/components/Contact.jsx
 import { useState } from "react";
-import { FaLinkedin, FaGithub, FaEnvelope, FaWhatsapp } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 export default function Contact({ isDark }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = (text) => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formStatus, setFormStatus] = useState("");
 
   const contacts = [
     {
-      name: "Email",
       icon: <FaEnvelope size={24} />,
-      action: () => handleCopy("sanjayasokan1382000@gmail.com"),
-      description: "Click to copy my email",
+      title: "Email",
+      action: () => navigator.clipboard.writeText("sanjayasokan1382000@gmail.com"),
     },
     {
-      name: "LinkedIn",
       icon: <FaLinkedin size={24} />,
+      title: "LinkedIn",
       action: () => window.open("https://www.linkedin.com/in/sanjaysan2001/", "_blank"),
-      description: "Visit my LinkedIn",
     },
     {
-      name: "GitHub",
       icon: <FaGithub size={24} />,
+      title: "GitHub",
       action: () => window.open("https://github.com/SanjayAsokan", "_blank"),
-      description: "Check my GitHub",
-    },
-    {
-      name: "WhatsApp",
-      icon: <FaWhatsapp size={24} />,
-      action: () => window.open("https://wa.me/919159625947", "_blank"),
-      description: "Chat on WhatsApp",
     },
   ];
 
-  const floatingEmojis = ["📧", "💻", "🚀", "🌟", "📱"];
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:5000/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      setFormStatus(data.message);
+      if (res.ok) setFormData({ name: "", email: "", message: "" });
+      setTimeout(() => setFormStatus(""), 3000);
+    } catch (err) {
+      console.error(err);
+      setFormStatus("Failed to send message. Try again.");
+    }
+  };
 
   return (
     <section
-      className={`relative w-full transition-colors duration-500 py-16 px-6 ${
+      className={`transition-colors duration-500 ${
         isDark ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
-      }`}
+      } py-0`}
     >
-      {/* Floating Emojis */}
-      {floatingEmojis.map((emoji, i) => (
-        <motion.span
-          key={i}
-          className="absolute text-2xl pointer-events-none select-none"
-          style={{
-            top: `${Math.random() * 90}%`,
-            left: `${Math.random() * 95}%`,
-            zIndex: 0,
-          }}
-          animate={{ y: [0, -15, 0], x: [0, 10, 0] }}
-          transition={{
-            repeat: Infinity,
-            duration: 6 + Math.random() * 4,
-            repeatType: "loop",
-            delay: Math.random() * 2,
-          }}
+      <div className="max-w-6xl mx-auto px-6 text-center ">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          Let’s <span className="text-blue-500 dark:text-blue-400">Connect</span> 🚀
+        </h2>
+        <p className="text-lg md:text-xl mb-10">
+          Reach out via the form or the icons below!
+        </p>
+
+        {/* Form on Top */}
+        <motion.form
+          onSubmit={handleSubmit}
+          className={`w-full max-w-3xl mx-auto flex flex-col gap-4 rounded-2xl p-8 shadow-xl border-2 transition-colors duration-300 mb-10 ${
+            isDark
+              ? "bg-gray-800 border-gray-700 shadow-gray-700"
+              : "bg-white border-gray-300 shadow-gray-300"
+          }`}
         >
-          {emoji}
-        </motion.span>
-      ))}
-
-      <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 relative z-10">
-        Contact Me
-      </h2>
-
-      {/* Quote */}
-      <p className="text-center text-lg md:text-xl italic mb-12 relative z-10">
-        "Opportunities don't happen, you create them." – Chris Grosser
-      </p>
-
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
-        {contacts.map((contact, i) => (
-          <motion.div
-            key={i}
-            onClick={contact.action}
-            className={`cursor-pointer flex flex-col items-center justify-center gap-4 p-6 rounded-xl shadow-lg border-2 transition-all duration-300 text-center
-              ${
+          {/* Name & Email Row */}
+          <div className="flex flex-col md:flex-row gap-4">
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Your Name"
+              required
+              className={`flex-1 p-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
                 isDark
-                  ? "bg-gray-800 border-gray-700 hover:border-blue-500 hover:shadow-[0_0_20px_rgba(59,130,246,0.6)]"
-                  : "bg-white border-gray-300 hover:border-blue-600 hover:shadow-[0_0_20px_rgba(37,99,235,0.3)]"
+                  ? "bg-gray-700 border-gray-600 text-white placeholder-gray-300"
+                  : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
               }`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <div className="text-4xl">{contact.icon}</div>
-            <h3 className="text-xl font-semibold">{contact.name}</h3>
-            <p className="text-sm">{contact.description}</p>
-          </motion.div>
-        ))}
-      </div>
+            />
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Your Email"
+              required
+              className={`flex-1 p-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
+                isDark
+                  ? "bg-gray-700 border-gray-600 text-white placeholder-gray-300"
+                  : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
+              }`}
+            />
+          </div>
 
-      {copied && (
-        <motion.div
-          className="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg z-50"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ duration: 0.3 }}
-        >
-          Email copied to clipboard!
+          {/* Message Field */}
+          <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            placeholder="Your Message"
+            rows={2}
+            required
+            className={`w-full p-4 rounded-xl border resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300`}
+          />
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className={`w-full py-3 rounded-xl font-semibold transition-colors duration-300 ${
+              isDark
+                ? "bg-blue-600 hover:bg-blue-500 text-white"
+                : "bg-blue-500 hover:bg-blue-600 text-white"
+            }`}
+          >
+            Send Message
+          </button>
+
+          {formStatus && (
+            <p className="text-green-500 text-center mt-4">{formStatus}</p>
+          )}
+        </motion.form>
+
+        {/* Icons Below Form */}
+        <motion.div className="flex justify-center gap-10 mt-6">
+          {contacts.map((c, i) => (
+            <motion.button
+              key={i}
+              onClick={c.action}
+              whileHover={{ scale: 1.1 }}
+              className={`w-16 h-16 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 ${
+                isDark
+                  ? "bg-gray-800 text-white hover:bg-blue-600 hover:text-white shadow-gray-700"
+                  : "bg-white text-gray-900 hover:bg-blue-500 hover:text-white shadow-gray-300"
+              }`}
+              title={c.title}
+            >
+              {c.icon}
+            </motion.button>
+          ))}
         </motion.div>
-      )}
+
+        {/* Message below icons */}
+        <p className="text-sm mt-4 opacity-80">
+          You can reach me directly using the icons above.
+        </p>
+      </div>
     </section>
   );
 }
