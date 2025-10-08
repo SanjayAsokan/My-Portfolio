@@ -15,12 +15,14 @@ export default function Contact({ isDark }) {
     {
       icon: <FaLinkedin size={24} />,
       title: "LinkedIn",
-      action: () => window.open("https://www.linkedin.com/in/sanjaysan2001/", "_blank"),
+      action: () =>
+        window.open("https://www.linkedin.com/in/sanjaysan2001/", "_blank"),
     },
     {
       icon: <FaGithub size={24} />,
       title: "GitHub",
-      action: () => window.open("https://github.com/SanjayAsokan", "_blank"),
+      action: () =>
+        window.open("https://github.com/SanjayAsokan", "_blank"),
     },
   ];
 
@@ -32,7 +34,7 @@ export default function Contact({ isDark }) {
     setFormStatus({ message: "Sending...", success: true });
 
     try {
-      const res = await fetch("https://my-portfolio-fxtx.onrender.com/contact", {
+      const res = await fetch("http://localhost:5000/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -43,36 +45,40 @@ export default function Contact({ isDark }) {
       setFormStatus({ message: data.message, success: data.success });
       if (data.success) setFormData({ name: "", email: "", message: "" });
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Error sending message:", err);
       setFormStatus({ message: "Failed to send message. Try again.", success: false });
-    } finally {
-      setTimeout(() => setFormStatus({ message: "", success: true }), 4000);
     }
+
+    setTimeout(() => setFormStatus({ message: "", success: true }), 4000);
   };
 
   return (
     <section
       className={`transition-colors duration-500 ${
         isDark ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
-      } py-0`} 
+      } py-12`}
     >
-      <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Let’s <span className="text-blue-500 dark:text-blue-400">Connect</span> 🚀
-        </h2>
-        <p className="text-lg md:text-xl mb-10">
-          Reach out via the form or the icons below!
-        </p>
+      <div className="max-w-5xl mx-auto px-6 flex flex-col gap-10">
+        {/* Heading */}
+        <div className="text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-1">
+            Let’s <span className="text-blue-500 dark:text-blue-400">Connect</span> 🚀
+          </h2>
+          <p className="text-lg md:text-xl text-gray-500 dark:text-gray-300">
+            Reach out via the form or the icons below!
+          </p>
+        </div>
 
+        {/* Form */}
         <motion.form
           onSubmit={handleSubmit}
-          className={`w-full max-w-3xl mx-auto flex flex-col gap-4 rounded-2xl p-8 shadow-xl border-2 transition-colors duration-300 mb-10 ${
+          className={`w-full mx-auto flex flex-col gap-3 rounded-2xl p-6 shadow-xl border-2 transition-colors duration-300 ${
             isDark
               ? "bg-gray-800 border-gray-700 shadow-gray-700"
               : "bg-white border-gray-300 shadow-gray-300"
           }`}
         >
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col md:flex-row gap-3">
             <input
               type="text"
               name="name"
@@ -80,7 +86,7 @@ export default function Contact({ isDark }) {
               onChange={handleChange}
               placeholder="Your Name"
               required
-              className={`flex-1 p-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
+              className={`flex-1 p-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 text-sm ${
                 isDark
                   ? "bg-gray-700 border-gray-600 text-white placeholder-gray-300"
                   : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
@@ -93,7 +99,7 @@ export default function Contact({ isDark }) {
               onChange={handleChange}
               placeholder="Your Email"
               required
-              className={`flex-1 p-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
+              className={`flex-1 p-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 text-sm ${
                 isDark
                   ? "bg-gray-700 border-gray-600 text-white placeholder-gray-300"
                   : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
@@ -106,9 +112,9 @@ export default function Contact({ isDark }) {
             value={formData.message}
             onChange={handleChange}
             placeholder="Your Message"
-            rows={4}
+            rows={2}
             required
-            className={`w-full p-4 rounded-xl border resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
+            className={`w-full p-3 rounded-xl border resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 text-sm ${
               isDark
                 ? "bg-gray-700 border-gray-600 text-white placeholder-gray-300"
                 : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
@@ -117,7 +123,7 @@ export default function Contact({ isDark }) {
 
           <button
             type="submit"
-            className={`w-full py-3 rounded-xl font-semibold transition-colors duration-300 ${
+            className={`w-full py-2.5 rounded-xl font-semibold text-sm transition-colors duration-300 ${
               isDark
                 ? "bg-blue-600 hover:bg-blue-500 text-white"
                 : "bg-blue-500 hover:bg-blue-600 text-white"
@@ -128,7 +134,7 @@ export default function Contact({ isDark }) {
 
           {formStatus.message && (
             <p
-              className={`text-center mt-4 ${
+              className={`text-center mt-2 text-sm ${
                 formStatus.success ? "text-green-500" : "text-red-500"
               }`}
             >
@@ -137,27 +143,29 @@ export default function Contact({ isDark }) {
           )}
         </motion.form>
 
-        <motion.div className="flex justify-center gap-10 mt-6">
-          {contacts.map((c, i) => (
-            <motion.button
-              key={i}
-              onClick={c.action}
-              whileHover={{ scale: 1.1 }}
-              className={`w-16 h-16 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 ${
-                isDark
-                  ? "bg-gray-800 text-white hover:bg-blue-600 hover:text-white shadow-gray-700"
-                  : "bg-white text-gray-900 hover:bg-blue-500 hover:text-white shadow-gray-300"
-              }`}
-              title={c.title}
-            >
-              {c.icon}
-            </motion.button>
-          ))}
-        </motion.div>
-
-        <p className="text-sm mt-4 opacity-80">
-          You can reach me directly using the icons above.
-        </p>
+        {/* Contact Icons */}
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-gray-500 dark:text-gray-300 text-sm mb-2">
+            Or reach me directly via:
+          </p>
+          <motion.div className="flex flex-wrap justify-center gap-4">
+            {contacts.map((c, i) => (
+              <motion.button
+                key={i}
+                onClick={c.action}
+                whileHover={{ scale: 1.1 }}
+                className={`w-14 h-14 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 ${
+                  isDark
+                    ? "bg-gray-800 text-white hover:bg-blue-600 hover:text-white shadow-gray-700"
+                    : "bg-white text-gray-900 hover:bg-blue-500 hover:text-white shadow-gray-300"
+                }`}
+                title={c.title}
+              >
+                {c.icon}
+              </motion.button>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   );
