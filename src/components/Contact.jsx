@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function Contact({ isDark }) {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [formStatus, setFormStatus] = useState("");
+  const [formStatus, setFormStatus] = useState({ message: "", success: true });
 
   const contacts = [
     {
@@ -29,6 +29,8 @@ export default function Contact({ isDark }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormStatus({ message: "Sending...", success: true });
+
     try {
       const res = await fetch("https://my-portfolio-fxtx.onrender.com/contact", {
         method: "POST",
@@ -37,12 +39,14 @@ export default function Contact({ isDark }) {
       });
 
       const data = await res.json();
-      setFormStatus(data.message);
-      if (res.ok) setFormData({ name: "", email: "", message: "" });
-      setTimeout(() => setFormStatus(""), 3000);
+
+      setFormStatus({ message: data.message, success: data.success });
+      if (data.success) setFormData({ name: "", email: "", message: "" });
     } catch (err) {
-      console.error(err);
-      setFormStatus("Failed to send message. Try again.");
+      console.error("Error:", err);
+      setFormStatus({ message: "Failed to send message. Try again.", success: false });
+    } finally {
+      setTimeout(() => setFormStatus({ message: "", success: true }), 4000);
     }
   };
 
@@ -52,7 +56,7 @@ export default function Contact({ isDark }) {
         isDark ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
       } py-0`}
     >
-      <div className="max-w-6xl mx-auto px-6 text-center ">
+      <div className="max-w-6xl mx-auto px-6 text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
           Let’s <span className="text-blue-500 dark:text-blue-400">Connect</span> 🚀
         </h2>
@@ -60,7 +64,6 @@ export default function Contact({ isDark }) {
           Reach out via the form or the icons below!
         </p>
 
-        {/* Form on Top */}
         <motion.form
           onSubmit={handleSubmit}
           className={`w-full max-w-3xl mx-auto flex flex-col gap-4 rounded-2xl p-8 shadow-xl border-2 transition-colors duration-300 mb-10 ${
@@ -69,7 +72,6 @@ export default function Contact({ isDark }) {
               : "bg-white border-gray-300 shadow-gray-300"
           }`}
         >
-          {/* Name & Email Row */}
           <div className="flex flex-col md:flex-row gap-4">
             <input
               type="text"
@@ -99,18 +101,20 @@ export default function Contact({ isDark }) {
             />
           </div>
 
-          {/* Message Field */}
           <textarea
             name="message"
             value={formData.message}
             onChange={handleChange}
             placeholder="Your Message"
-            rows={2}
+            rows={4}
             required
-            className={`w-full p-4 rounded-xl border resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300`}
+            className={`w-full p-4 rounded-xl border resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
+              isDark
+                ? "bg-gray-700 border-gray-600 text-white placeholder-gray-300"
+                : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
+            }`}
           />
 
-          {/* Submit Button */}
           <button
             type="submit"
             className={`w-full py-3 rounded-xl font-semibold transition-colors duration-300 ${
@@ -122,12 +126,17 @@ export default function Contact({ isDark }) {
             Send Message
           </button>
 
-          {formStatus && (
-            <p className="text-green-500 text-center mt-4">{formStatus}</p>
+          {formStatus.message && (
+            <p
+              className={`text-center mt-4 ${
+                formStatus.success ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              {formStatus.message}
+            </p>
           )}
         </motion.form>
 
-        {/* Icons Below Form */}
         <motion.div className="flex justify-center gap-10 mt-6">
           {contacts.map((c, i) => (
             <motion.button
@@ -146,7 +155,6 @@ export default function Contact({ isDark }) {
           ))}
         </motion.div>
 
-        {/* Message below icons */}
         <p className="text-sm mt-4 opacity-80">
           You can reach me directly using the icons above.
         </p>

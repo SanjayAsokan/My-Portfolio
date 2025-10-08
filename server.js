@@ -8,6 +8,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Allow all origins (for testing, you can restrict in production)
 app.use(cors());
 app.use(express.json());
 
@@ -20,25 +21,29 @@ app.post("/contact", async (req, res) => {
 
   try {
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        pass: process.env.EMAIL_PASS, // App Password
       },
     });
 
     const mailOptions = {
-      from: email,
+      from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
-      subject: `New message from ${name}`,
-      text: message,
+      subject: `New message from ${name} <${email}>`,
+      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
     };
 
+    console.log("Sending email with:", mailOptions);
+
     await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: "Message sent successfully!" });
+    res.status(200).json({ success: true, message: "Message sent successfully!" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to send message." });
+    console.error("Error sending email:", err);
+    res.status(500).json({ success: false, message: "Failed to send message." });
   }
 });
 
