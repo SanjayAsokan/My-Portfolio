@@ -12,7 +12,12 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-app.post("/", async (req, res) => {
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
+
+
+app.post("/contact", async (req, res) => {
   const { name, email, message } = req.body;
 
   if (!name || !email || !message) {

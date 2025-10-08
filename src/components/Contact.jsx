@@ -32,7 +32,7 @@ export default function Contact({ isDark }) {
     setFormStatus({ message: "Sending...", success: true });
 
     try {
-      const res = await fetch("https://my-portfolio-fxtx.onrender.com/", {
+      const res = await fetch("https://my-portfolio-fxtx.onrender.com/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
