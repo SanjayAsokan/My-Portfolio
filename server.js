@@ -1,4 +1,3 @@
-// server.js (ES module version)
 import express from "express";
 import nodemailer from "nodemailer";
 import cors from "cors";
