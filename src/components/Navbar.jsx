@@ -15,7 +15,7 @@ export default function Navbar({ toggleTheme, isDark }) {
 
   // Resume button handler
   const handleResumeClick = () => {
-    const fileUrl = "/Sanjay_Asokan.pdf"; // PDF in public folder
+    const fileUrl = "/Sanjay Asokan.pdf"; // PDF in public folder
 
     // Open in new tab
     const newTab = window.open(fileUrl, "_blank");
@@ -24,7 +24,7 @@ export default function Navbar({ toggleTheme, isDark }) {
     // Trigger download
     const link = document.createElement("a");
     link.href = fileUrl;
-    link.download = "Sanjay_Asokan.pdf";
+    link.download = "Sanjay Asokan.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
