@@ -15,7 +15,7 @@ export default function Navbar({ toggleTheme, isDark }) {
 
   // Resume button handler
   const handleResumeClick = () => {
-    const fileUrl = "/Sanjay_Asokan.pdf"; // PDF in public folder
+    const fileUrl = "/Sanjay-Asokan-Resume.pdf"; // PDF in public folder
 
     // Open in new tab
     const newTab = window.open(fileUrl, "_blank");

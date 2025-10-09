@@ -17,7 +17,7 @@ export default function Hero({ isDark }) {
 
   // Resume button click handler
   const handleResumeClick = () => {
-    const fileUrl = "/Sanjay_Asokan.pdf"; // PDF in public folder
+    const fileUrl = "/Sanjay-Asokan-Resume.pdf"; // PDF in public folder
 
     // Open PDF in a new tab
     const newTab = window.open(fileUrl, "_blank");
