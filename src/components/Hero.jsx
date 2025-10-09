@@ -17,7 +17,7 @@ export default function Hero({ isDark }) {
 
   // Resume button click handler
   const handleResumeClick = () => {
-    const fileUrl = "/Sanjay Asokan.pdf"; // PDF in public folder
+    const fileUrl = "/Sanjay_Asokan.pdf"; // PDF in public folder
 
     // Open PDF in a new tab
     const newTab = window.open(fileUrl, "_blank");
@@ -26,7 +26,7 @@ export default function Hero({ isDark }) {
     // Trigger download
     const link = document.createElement("a");
     link.href = fileUrl;
-    link.download = "Sanjay Asokan.pdf";
+    link.download = "Sanjay_Asokan.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

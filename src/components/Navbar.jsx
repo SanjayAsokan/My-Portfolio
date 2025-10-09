@@ -15,7 +15,7 @@ export default function Navbar({ toggleTheme, isDark }) {
 
   // Resume button handler
   const handleResumeClick = () => {
-    const fileUrl = "/Sanjay Asokan.pdf"; // PDF in public folder
+    const fileUrl = "/Sanjay_Asokan.pdf"; // PDF in public folder
 
     // Open in new tab
     const newTab = window.open(fileUrl, "_blank");
@@ -24,7 +24,7 @@ export default function Navbar({ toggleTheme, isDark }) {
     // Trigger download
     const link = document.createElement("a");
     link.href = fileUrl;
-    link.download = "Sanjay Asokan.pdf";
+    link.download = "Sanjay_Asokan.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -55,7 +55,7 @@ export default function Navbar({ toggleTheme, isDark }) {
           ))}
         </div>
 
-        {/* Right side controls: Theme toggle first, then Resume */}
+        {/* Right side controls: Theme toggle, then Resume */}
         <div className="flex items-center gap-3">
           {/* Theme toggle */}
           <button
@@ -88,11 +88,13 @@ export default function Navbar({ toggleTheme, isDark }) {
       {/* Mobile menu */}
       {isOpen && (
         <>
+          {/* Blur background */}
           <div
             className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
           ></div>
 
+          {/* Dropdown menu */}
           <motion.ul
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -115,7 +117,7 @@ export default function Navbar({ toggleTheme, isDark }) {
               </li>
             ))}
 
-            {/* Mobile Resume button at the bottom */}
+            {/* Mobile Resume button */}
             <li className="text-center mt-2">
               <button
                 onClick={handleResumeClick}
