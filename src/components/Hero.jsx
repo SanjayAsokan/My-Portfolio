@@ -15,9 +15,26 @@ export default function Hero({ isDark }) {
 
   const emojis = ["🚀", "✨", "💻", "🌟", "🎯"];
 
+  // Resume button click handler
+  const handleResumeClick = () => {
+    const fileUrl = "/Sanjay Asokan.pdf"; // PDF in public folder
+
+    // Open PDF in a new tab
+    const newTab = window.open(fileUrl, "_blank");
+    if (newTab) newTab.focus();
+
+    // Trigger download
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = "Sanjay Asokan.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <section className="relative flex flex-col items-center justify-center px-4 min-h-[65vh] overflow-hidden">
-      {/* Floating Emojis in background */}
+      {/* Floating Emojis */}
       {emojis.map((emoji, i) => (
         <motion.span
           key={i}
@@ -68,15 +85,15 @@ export default function Hero({ isDark }) {
         </h2>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <a
-            href="https://drive.google.com/file/d/1dL9XStUQ0PDXYkByG76UtCZkSY8I6W-u/view?usp=drive_link"
-            target="_blank"
-            rel="noopener noreferrer"
+          {/* Resume Button */}
+          <button
+            onClick={handleResumeClick}
             className="px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors"
           >
             Resume
-          </a>
+          </button>
 
+          {/* Social Links */}
           <div className="flex gap-4 mt-2 sm:mt-0">
             <a
               href="https://github.com/SanjayAsokan"
