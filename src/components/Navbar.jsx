@@ -24,7 +24,7 @@ export default function Navbar({ toggleTheme, isDark }) {
     // Trigger download
     const link = document.createElement("a");
     link.href = fileUrl;
-    link.download = "Sanjay_Asokan.pdf";
+    link.download = "Sanjay-Asokan-Resume.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
