@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
+import emailjs from "emailjs-com";
 
 export default function Contact({ isDark }) {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [formStatus, setFormStatus] = useState({ message: "", success: true });
+  const [formStatus, setFormStatus] = useState({ message: "", success: null, loading: false });
 
   const contacts = [
     {
@@ -21,8 +22,7 @@ export default function Contact({ isDark }) {
     {
       icon: <FaGithub size={24} />,
       title: "GitHub",
-      action: () =>
-        window.open("https://github.com/SanjayAsokan", "_blank"),
+      action: () => window.open("https://github.com/SanjayAsokan", "_blank"),
     },
   ];
 
@@ -31,33 +31,30 @@ export default function Contact({ isDark }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormStatus({ message: "Sending...", success: true });
+    setFormStatus({ message: "Sending...", success: null, loading: true });
 
     try {
-      const res = await fetch("http://localhost:5000/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const result = await emailjs.send(
+        "service_tauc6rn",     // replace with your Service ID
+        "template_ynczgep",    // replace with your Template ID
+        formData,              // { name, email, message }
+        "mCAaeochGlS3Wxu9x"         // replace with your User ID
+      );
 
-      const data = await res.json();
+      console.log("Email sent:", result.text);
+      setFormStatus({ message: "Message sent successfully!", success: true, loading: false });
+      setFormData({ name: "", email: "", message: "" });
 
-      setFormStatus({ message: data.message, success: data.success });
-      if (data.success) setFormData({ name: "", email: "", message: "" });
     } catch (err) {
       console.error("Error sending message:", err);
-      setFormStatus({ message: "Failed to send message. Try again.", success: false });
+      setFormStatus({ message: "Failed to send message. Try again later.", success: false, loading: false });
     }
 
-    setTimeout(() => setFormStatus({ message: "", success: true }), 4000);
+    setTimeout(() => setFormStatus({ message: "", success: null, loading: false }), 5000);
   };
 
   return (
-    <section
-      className={`transition-colors duration-500 ${
-        isDark ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
-      } py-12`}
-    >
+    <section className={`transition-colors duration-500 ${isDark ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"} py-12`}>
       <div className="max-w-5xl mx-auto px-6 flex flex-col gap-10">
         {/* Heading */}
         <div className="text-center">
@@ -73,9 +70,7 @@ export default function Contact({ isDark }) {
         <motion.form
           onSubmit={handleSubmit}
           className={`w-full mx-auto flex flex-col gap-3 rounded-2xl p-6 shadow-xl border-2 transition-colors duration-300 ${
-            isDark
-              ? "bg-gray-800 border-gray-700 shadow-gray-700"
-              : "bg-white border-gray-300 shadow-gray-300"
+            isDark ? "bg-gray-800 border-gray-700 shadow-gray-700" : "bg-white border-gray-300 shadow-gray-300"
           }`}
         >
           <div className="flex flex-col md:flex-row gap-3">
@@ -87,9 +82,7 @@ export default function Contact({ isDark }) {
               placeholder="Your Name"
               required
               className={`flex-1 p-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 text-sm ${
-                isDark
-                  ? "bg-gray-700 border-gray-600 text-white placeholder-gray-300"
-                  : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
+                isDark ? "bg-gray-700 border-gray-600 text-white placeholder-gray-300" : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
               }`}
             />
             <input
@@ -100,9 +93,7 @@ export default function Contact({ isDark }) {
               placeholder="Your Email"
               required
               className={`flex-1 p-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 text-sm ${
-                isDark
-                  ? "bg-gray-700 border-gray-600 text-white placeholder-gray-300"
-                  : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
+                isDark ? "bg-gray-700 border-gray-600 text-white placeholder-gray-300" : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
               }`}
             />
           </div>
@@ -112,30 +103,30 @@ export default function Contact({ isDark }) {
             value={formData.message}
             onChange={handleChange}
             placeholder="Your Message"
-            rows={2}
+            rows={3}
             required
             className={`w-full p-3 rounded-xl border resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 text-sm ${
-              isDark
-                ? "bg-gray-700 border-gray-600 text-white placeholder-gray-300"
-                : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
+              isDark ? "bg-gray-700 border-gray-600 text-white placeholder-gray-300" : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
             }`}
           />
 
           <button
             type="submit"
+            disabled={formStatus.loading}
             className={`w-full py-2.5 rounded-xl font-semibold text-sm transition-colors duration-300 ${
               isDark
-                ? "bg-blue-600 hover:bg-blue-500 text-white"
-                : "bg-blue-500 hover:bg-blue-600 text-white"
+                ? "bg-blue-600 hover:bg-blue-500 text-white disabled:opacity-50"
+                : "bg-blue-500 hover:bg-blue-600 text-white disabled:opacity-50"
             }`}
           >
-            Send Message
+            {formStatus.loading ? "Sending..." : "Send Message"}
           </button>
 
           {formStatus.message && (
             <p
               className={`text-center mt-2 text-sm ${
-                formStatus.success ? "text-green-500" : "text-red-500"
+                formStatus.success === true ? "text-green-500" :
+                formStatus.success === false ? "text-red-500" : "text-gray-500"
               }`}
             >
               {formStatus.message}
@@ -145,9 +136,7 @@ export default function Contact({ isDark }) {
 
         {/* Contact Icons */}
         <div className="flex flex-col items-center gap-4">
-          <p className="text-gray-500 dark:text-gray-300 text-sm mb-2">
-            Or reach me directly via:
-          </p>
+          <p className="text-gray-500 dark:text-gray-300 text-sm mb-2">Or reach me directly via:</p>
           <motion.div className="flex flex-wrap justify-center gap-4">
             {contacts.map((c, i) => (
               <motion.button
